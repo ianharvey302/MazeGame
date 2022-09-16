@@ -4,17 +4,33 @@ using UnityEngine;
 
 public class MovementActivator : MonoBehaviour
 {
-    [SerializeField] GameObject objectToActivate;
+    [SerializeField] List<GameObject> toActivate;
 
     // Start is called before the first frame update
     void Start()
     {
-        objectToActivate.GetComponent<MoveObject>().enabled = true;
+        
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    void OnTriggerEnter(Collider collision)
+    {
+        foreach (GameObject o in toActivate)
+        {
+            o.SendMessage("Activate");
+        }
+    }
+
+    void OnTriggerExit(Collider collision)
+    {
+        foreach (GameObject o in toActivate)
+        {
+            o.SendMessage("Deactivate");
+        }
     }
 }

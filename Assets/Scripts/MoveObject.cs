@@ -6,15 +6,18 @@ public class MoveObject : MonoBehaviour
 {
     [SerializeField] float moveSpeed;
     [SerializeField] Vector3 moveDirection;
+    [SerializeField] float totalMoveDistance;
 
-    float totalMoveDistance;
-    Vector3 startingLocation;   
+    Vector3 startingLocation;
+    Vector3 negDirection;
+    bool activated;
 
     // Start is called before the first frame update
     void Start()
     {
-        totalMoveDistance = 10f;
         startingLocation = gameObject.transform.position;
+        negDirection = -moveDirection;
+        activated = false;
     }
 
     // Update is called once per frame
@@ -22,21 +25,34 @@ public class MoveObject : MonoBehaviour
     {
         float distanceTraveled = GetDistanceTraveled();
 
-        if (distanceTraveled > totalMoveDistance)
+        if ((activated && distanceTraveled < totalMoveDistance) || (!activated && distanceTraveled > 0.001f))
         {
-            FlipMoveDirection();
+            gameObject.transform.Translate(moveDirection * moveSpeed);
         }
-
-        //gameObject.transform.Translate(moveDirection * moveSpeed);
     }
 
     void FlipMoveDirection()
     {
-        moveDirection = -moveDirection;
+        if (!activated)
+            moveDirection = negDirection;
+        else
+            moveDirection = -negDirection;
     }
 
     float GetDistanceTraveled()
     {
         return Vector3.Distance(gameObject.transform.position, startingLocation);
+    }
+
+    public void Activate()
+    {
+        activated = true;
+        FlipMoveDirection();
+    }
+
+    public void Deactivate()
+    {
+        activated = false;
+        FlipMoveDirection();
     }
 }

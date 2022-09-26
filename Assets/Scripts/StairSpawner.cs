@@ -14,6 +14,7 @@ public class StairSpawner : MonoBehaviour
     int delay;
     bool activated;
     
+    // Nicely done here with both the spawner and the SinMovement of the stairs. 
 
     // Start is called before the first frame update
     void Start()
